@@ -6,12 +6,11 @@ class App {
         console.log(text);
     }
 
-    doSomethingThenAlert(cbObj) {
-        console.log("doSomething...");
+    fetchDataThenAlert(cb) {
+        console.log("fetch data...");
         setTimeout(() => {
             console.log("...then alert!");
-            cbObj.alert("stuff the backend sent");
-            cbObj.alert2("stuff the backend sent");
+            cb(JSON.stringify({timestamp: new Date()}));
         }, 1000)
     };
 

@@ -51,7 +51,7 @@ app.get("/", function (req, res) {
 });
 
 // start express server on a random open port
-// then open Chrome in app mode to the /?k={SERVER_KEY} route,
+// then open default browser to /?k={SERVER_KEY} route,
 // which will redirect to the actual route.
 const server = app.listen(0);
 server.on("listening", function () {
@@ -59,8 +59,8 @@ server.on("listening", function () {
     const port = server.address().port;
     const url = `http://${hostname}:${port}?k=${SERVER_KEY}`;
     console.log(`Server started at ${url} on ${new Date()}`);
-    spawn("C:/Program Files (x86)/Google/Chrome/Application/chrome.exe", [url] /*["--window-size=500,500", `--app=${url}`]*/, {
-        detached: true  // we don't want chrome to crash if our app crashes!
+    spawn("cmd", ["/c", "start", url], {
+        detached: true
     })
 });
 
@@ -98,7 +98,6 @@ wss.on('connection', function connection(ws, req) {
         }
     };
 
-    //
     // connect the application-specific functions
     messageBus.subscriber = new AppClass();
 
