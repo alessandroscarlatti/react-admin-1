@@ -17,7 +17,7 @@ The frontend will launch in the default web browser.  The backend will launch in
 
 ## Structure
 
-There are two components: frontend and backend.
+There are two components: frontend client and backend server.
 The two communicate via HTTP and WebSocket.
 
 Static resources are served via HTTP.
