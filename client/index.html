@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Mumbo App</title>
+    <meta charset="utf-8">
+    <link rel="icon" href="favicon.png" type="image/png" sizes="64x64">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="libs/bootstrap.min.css">
+    <script src="libs/react.development.js"></script>
+    <script src="libs/react-dom.development.js"></script>
+    <script src="libs/babel.min.js"></script>
+    <!----------------------------------------------------------------------------------------->
+    <!----------------------------------------------------------------------------------------->
+    <!-----------------------      FRONT END APPLICATION FUNCTIONS           ------------------>
+    <!----------------------------------------------------------------------------------------->
+    <!----------------------------------------------------------------------------------------->
+    <script src="libs/messageBus.js"></script>
+	<script>
+        function getCookieValue(name) {
+            let values = document.cookie.match('(^|[^;]+)\\s*' + name + '\\s*=\\s*([^;]+)');
+            return values ? values.pop() : '';
+        }
+
+		/**
+		 * Connect the front-end to the back end via websocket.
+		 */
+		function initWs(app) {
+			// build url
+			let key = getCookieValue("server_key");
+			let protocol = (window.location.protocol === "https:") ? "wss" : "ws";
+			let url = `${protocol}://${window.location.host}/ws/${key}`;
+
+			// connect to back-end websocket.
+			console.log("Connecting to server: ", url);
+			let ws = new WebSocket(url);
+
+			// build message bus and connect front-end to back-end.
+			let messageBus = new MessageBus();
+			messageBus.send = (message) => ws.send(message);
+			ws.onmessage = function (message) {
+				console.log("received message", message);
+				messageBus.receive(message.data);
+			};
+
+			// set to notify user if backend is disconnected.
+			ws.onclose = function (e) {
+			    console.log("WebSocket connection closed.", e);
+                let willClose = confirm("Disconnected from server. Close app?");
+                if (willClose) {
+                    window.close();
+                }
+            };
+
+			// inject the server reference
+			app.server = messageBus.publisher;
+			messageBus.subscriber = app;
+		}
+	</script>
+
+    <!----------------------------------------------------------------------------------------->
+    <!----------------------------------------------------------------------------------------->
+    <!-----------------------              REACT APPLICATION UI              ------------------>
+    <!----------------------------------------------------------------------------------------->
+    <!----------------------------------------------------------------------------------------->
+
+    <script src="app.js" type="text/babel"></script>
+</head>
+
+<!----------------------------------------------------------------------------------------->
+<!----------------------------------------------------------------------------------------->
+<!-----------------------              HTML APPLICATION UI               ------------------>
+<!----------------------------------------------------------------------------------------->
+<!----------------------------------------------------------------------------------------->
+
+<body>
+<div id="root"></div>
+<script src="main.js" type="text/babel"></script>
+</body>
+
+</html>
