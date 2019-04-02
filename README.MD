@@ -5,9 +5,10 @@
 The purpose of this project is to enable an extremely lightweight, but robust frontend application
 to be bootstrapped by simply copy/pasting a base project.
 
-This base project already includes all the dependencies necessary to run the application.
+This base project already includes all the precompiled dependencies necessary to run the application.
 
-Customization is simple.  All sources, even the HTTP and WebSocket server are completely customizable.
+Customization is simple.  All sources, even the HTTP and WebSocket server are completely customizable 
+without further compilation because they are written for NodeJS.
 
 ## Demo
 Double-click `launch.bat` to start the app.
