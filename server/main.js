@@ -41,11 +41,12 @@ app.get("/", function (req, res) {
         // should be the first request made (/?k={SERVER_KEY})
         // redirect so that the url is clean and does not visually leak the key.
         res.cookie("server_key", SERVER_KEY);
-        res.redirect(APP_ROUTE);
-    } else if (req.cookies["server_key"] === SERVER_KEY) {
+        res.redirect(APP_ROUTE + "/demo.html" + "?k=" + SERVER_KEY);
+    } /*else if (req.cookies["server_key"] === SERVER_KEY) {
         // if user actually hits "/" again.
-        res.redirect(APP_ROUTE);
-    } else {
+		// redirect to the ?k={SERVER_KEY} route for convenience.
+        res.redirect(APP_ROUTE + "?k=" + SERVER_KEY);
+    }*/ else {
         res.sendStatus(401);
     }
 });
@@ -120,6 +121,6 @@ wss.on('connection', function connection(ws, req) {
 
         // if any previously closed connection is counting down, cancel it.
         clearTimeout(shutdownTimer);
-        shutdownTimer = setTimeout(shutDownServerIfNoClients, 1000);
+        shutdownTimer = setTimeout(shutDownServerIfNoClients, 3000);
     });
 });
